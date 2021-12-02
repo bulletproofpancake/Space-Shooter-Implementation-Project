@@ -9,4 +9,9 @@ public class Bullet : Area2D
     {
         Position -= Vector2.Down * _movementSpeed * delta;
     }
+
+    public void _onVisibilityNotifier2DScreenExited()
+    {
+        QueueFree();
+    }
 }

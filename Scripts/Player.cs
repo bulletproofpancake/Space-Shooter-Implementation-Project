@@ -9,11 +9,16 @@ public class Player : Area2D
     private Sprite _sprite;
 
     [Export()] private PackedScene _bullet;
+    private Node2D _firingPositions;
+    [Export()] private float _fireDelay = 0.1f;
+    private Timer _fireDelayTimer;
 
     public override void _Ready()
     {
         _screenSize = GetViewportRect().Size;
         _sprite = GetNode<Sprite>("Sprite");
+        _firingPositions = GetNode<Node2D>("FiringPositions");
+        _fireDelayTimer = GetNode<Timer>("FireDelayTimer");
     }
 
     public override void _Process(float delta)
@@ -29,7 +34,7 @@ public class Player : Area2D
         else if (Input.IsActionPressed("move_right"))
             _direction.x = 1;
         
-        if(Input.IsActionPressed("shoot"))
+        if(Input.IsActionPressed("shoot") && _fireDelayTimer.IsStopped())
             Shoot();
     }
 
@@ -41,8 +46,12 @@ public class Player : Area2D
 
     private void Shoot()
     {
-        var bullet = (Node2D) _bullet.Instance();
-        bullet.Position = Position;
-        GetTree().CurrentScene.AddChild(bullet);
+        _fireDelayTimer.Start(_fireDelay);
+        foreach (Node2D child in _firingPositions.GetChildren())
+        {
+            var bullet = (Node2D) _bullet.Instance();
+            bullet.GlobalPosition = child.GlobalPosition;
+            GetTree().CurrentScene.AddChild(bullet);   
+        }
     }
 }
