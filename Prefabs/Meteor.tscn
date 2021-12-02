@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Sprites/Meteor/meteorBrown_big2.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/Meteor.cs" type="Script" id=2]
+
+[node name="Meteor" type="Area2D" groups=["damageable"]]
+scale = Vector2( 0.5, 0.5 )
+script = ExtResource( 2 )
+_life = 10
+_minSpeed = 50
+_maxSpeed = 80
+_minRotation = -20
+_maxRotation = 20
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -40, -40, 6, -48, 59, -29, 46, 18, -10, 33, -25, 48, -54, 27, -60, -5 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="." groups=["damageable"]]
+position = Vector2( -3.8147e-06, -9.53674e-07 )
+scale = Vector2( 6, 4.8 )
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_onVisibilityNotifier2DScreenExited"]
