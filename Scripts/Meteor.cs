@@ -11,6 +11,8 @@ public class Meteor : DamageableArea2D
     private Random _randomRotation = new Random();
     private int _rotationRate;
 
+    [Export()] private int _meteorDamage = 1;
+    
     public override void _Ready()
     {
         _speed = _randomSpeed.Next(_minSpeed, _maxSpeed);
@@ -26,5 +28,11 @@ public class Meteor : DamageableArea2D
     public void _onVisibilityNotifier2DScreenExited()
     {
         QueueFree();
+    }
+
+    public void _onMeteorAreaEntered(Area2D area)
+    {
+        if(area is Player player)
+            player.TakeDamage(_meteorDamage);
     }
 }

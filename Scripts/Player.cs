@@ -1,6 +1,6 @@
 using Godot;
 
-public class Player : Area2D
+public class Player : DamageableArea2D
 {
     [Export()] private float _movementSpeed = 100f;
     private Vector2 _direction;

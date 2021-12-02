@@ -4,7 +4,7 @@ public abstract class DamageableArea2D : Area2D
 {
     [Export()] private int _life = 20;
     
-    public void TakeDamage(int amount)
+    public virtual void TakeDamage(int amount)
     {
         GD.Print($"Taking {amount} Damage");
         _life -= amount;

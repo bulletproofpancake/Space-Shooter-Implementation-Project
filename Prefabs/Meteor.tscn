@@ -22,4 +22,5 @@ polygon = PoolVector2Array( -40, -40, 6, -48, 59, -29, 46, 18, -10, 33, -25, 48,
 position = Vector2( -3.8147e-06, -9.53674e-07 )
 scale = Vector2( 6, 4.8 )
 
+[connection signal="area_entered" from="." to="." method="_onMeteorAreaEntered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_onVisibilityNotifier2DScreenExited"]
