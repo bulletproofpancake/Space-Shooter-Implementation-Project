@@ -1,0 +1,2 @@
+# Space Shooter Implementation Project
+This repository contains how I implemented a space shooter project in (hopefully) 3 different ways (Godot, Unity, and MonoGame). I am currently working on the Godot with C# version using the [Let's Make a Godot Space Shooter](https://youtube.com/playlist?list=PLah6faXAgguPlyHWM5G9in10UzRcdeb2R) playlist by [CodeNMore](https://www.youtube.com/c/CodeNMore) and assets from [Kenney](https://kenney.nl).
