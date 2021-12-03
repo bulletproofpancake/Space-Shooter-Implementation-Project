@@ -6,48 +6,28 @@ public static class Vector2Extensions
     /// Clamps the position within the viewport 
     /// </summary>
     /// <param name="position">Position of the object that needs to be clamped</param>
-    /// <param name="screenSize">The size of the viewport</param>
-    /// <returns>Clamped object position</returns>
-    public static Vector2 ClampPositionToScreen(this Vector2 position)
-    {
-        Vector2 upperRightBounds = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
-        Vector2 lowerLeftBounds = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
-        
-        return new Vector2(
-            Mathf.Clamp(position.x, lowerLeftBounds.x, upperRightBounds.x),
-            Mathf.Clamp(position.y, lowerLeftBounds.y, upperRightBounds.y)
-        );
-    }
-
-    /// <summary>
-    /// Clamps the position within the viewport with an offset by the sprite of the object
-    /// </summary>
-    /// <param name="position">Position of the object that needs to be clamped</param>
-    /// <param name="spriteRenderer">Sprite of the object that needs to be clamped</param>
+    /// <param name="cameraBounds">The bounds of the camera</param>
     /// <returns>Clamped object position. <b>RETURN TO <c> transform.position</c> FOR BEST RESULTS</b></returns>
-    public static Vector2 ClampPositionToScreen(this Vector2 position, CameraBounds cameraBounds, Vector2 size)
+    public static Vector2 ClampPositionToScreen(this Vector2 position, CameraBounds cameraBounds)
     {
         return new Vector2(
-            Mathf.Clamp(position.x, cameraBounds.lowerLeft.x + size.x, cameraBounds.upperRight.x - size.x),
-            Mathf.Clamp(position.y, cameraBounds.lowerLeft.y + size.y, cameraBounds.upperRight.y - size.y)
+            Mathf.Clamp(position.x, cameraBounds.lowerLeft.x, cameraBounds.upperRight.x),
+            Mathf.Clamp(position.y, cameraBounds.lowerLeft.y, cameraBounds.upperRight.y)
         );
     }
 
-    public struct CameraBounds
+   /// <summary>
+   /// Clamps the position within the viewport with an offset by the sprite of the object
+   /// </summary>
+   /// <param name="position">Position of the object that needs to be clamped</param>
+   /// <param name="cameraBounds">The bounds of the camera</param>
+   /// <param name="spriteBounds">The bounds of the sprite</param>
+   /// <returns>Clamped object position according to sprite offset. <b>RETURN TO <c> transform.position</c> FOR BEST RESULTS</b></returns>
+    public static Vector2 ClampPositionToScreen(this Vector2 position, CameraBounds cameraBounds, Vector2 spriteBounds)
     {
-        public Vector2 upperRight;
-        public Vector2 lowerLeft;
-
-        public CameraBounds(Vector2 upperRight, Vector2 lowerLeft)
-        {
-            this.upperRight = upperRight;
-            this.lowerLeft = lowerLeft;
-        }
-
-        public CameraBounds(Camera _camera)
-        {
-            this.upperRight = _camera.ViewportToWorldPoint(new Vector3(1, 1, 0));
-            this.lowerLeft =  _camera.ViewportToWorldPoint(new Vector3(0, 0, 0));
-        }
+        return new Vector2(
+            Mathf.Clamp(position.x, cameraBounds.lowerLeft.x + spriteBounds.x, cameraBounds.upperRight.x - spriteBounds.x),
+            Mathf.Clamp(position.y, cameraBounds.lowerLeft.y + spriteBounds.y, cameraBounds.upperRight.y - spriteBounds.y)
+        );
     }
 }

@@ -8,12 +8,17 @@ public class Player : MonoBehaviour
     private Vector2 _direction;
     private SpriteRenderer _spriteRenderer;
     private Camera _camera;
+    private CameraBounds _cameraBounds;
+    private Vector2 _spriteBounds;
     
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _camera = Camera.main;
+        _cameraBounds = new CameraBounds(_camera);
+
+        _spriteBounds = _spriteRenderer.bounds.size * 0.5f;
     }
 
     private void Update()
@@ -23,7 +28,7 @@ public class Player : MonoBehaviour
 
         //RestrictMovement();
 
-        //transform.position = _rigidbody2D.position.ClampPositionToScreen(_spriteRenderer);
+        transform.position = _rigidbody2D.position.ClampPositionToScreen(_cameraBounds);
 
     }
 
