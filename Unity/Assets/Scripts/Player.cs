@@ -3,11 +3,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float _movementSpeed;
     private Rigidbody2D _rigidbody2D;
     private Vector2 _direction;
-    private SpriteRenderer _spriteRenderer;
+    
     private Camera _camera;
+    private SpriteRenderer _spriteRenderer;
+
+    [Header("Health")] 
+    [SerializeField] private int _life;
+    
+    [Header("Combat")] 
+    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Transform _firingPoints;
+    [SerializeField] private float _fireRate;
     
     private void Awake()
     {
@@ -22,29 +32,22 @@ public class Player : MonoBehaviour
         _direction.Normalize();
 
         transform.position = _rigidbody2D.position.ClampPositionToScreen(_camera.GetViewportBounds(),_spriteRenderer.GetBoundsSize());
-
+        
+        if(Input.GetKey(KeyCode.Space)) Shoot();
     }
 
     private void FixedUpdate()
     {
         _rigidbody2D.MovePosition(_rigidbody2D.position + _direction * _movementSpeed * Time.fixedDeltaTime);
-        //RestrictMovement();
     }
-    
-    private void RestrictMovement()
+
+    private void Shoot()
     {
-        var upperRightCorner = _camera.ViewportToWorldPoint(new Vector3(1, 1, 0));
-        var lowerLeftCorner = _camera.ViewportToWorldPoint(new Vector3(0, 0, 0));
-
-        var bounds = _spriteRenderer.bounds;
-        var playerWidth = bounds.size.x / 2;
-        var playerHeight = bounds.size.y / 2;
-
-        var position = transform.position;
-        var xVal = Mathf.Clamp(position.x, lowerLeftCorner.x + playerWidth, upperRightCorner.x - playerWidth);
-        var yVal = Mathf.Clamp(position.y, lowerLeftCorner.y + playerHeight, upperRightCorner.y - playerHeight);
-
-        position = new Vector3(xVal, yVal, 0);
-        transform.position = position;
+        foreach (Transform firingPoint in _firingPoints)
+        {
+            var bullet = Instantiate(_bulletPrefab);
+            bullet.transform.position = firingPoint.position;
+            bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 25f);
+        }
     }
 }
