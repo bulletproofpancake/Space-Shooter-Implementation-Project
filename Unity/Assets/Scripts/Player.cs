@@ -17,7 +17,9 @@ public class Player : MonoBehaviour
     [Header("Combat")] 
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _firingPoints;
-    [SerializeField] private float _fireRate;
+    [SerializeField] private float _startFireRate;
+    private float _fireRate;
+    private bool _canShoot;
     
     private void Awake()
     {
@@ -26,14 +28,30 @@ public class Player : MonoBehaviour
         _camera = Camera.main;
     }
 
+    private void Start()
+    {
+        _fireRate = _startFireRate;
+    }
+
     private void Update()
     {
         _direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         _direction.Normalize();
 
         transform.position = _rigidbody2D.position.ClampPositionToScreen(_camera.GetViewportBounds(),_spriteRenderer.GetBoundsSize());
+
+        if (_fireRate > 0)
+        {
+            _canShoot = false;
+            _fireRate -= Time.deltaTime;
+        }
+        else
+        {
+            _canShoot = true;
+            _fireRate = _startFireRate;
+        }
         
-        if(Input.GetKey(KeyCode.Space)) Shoot();
+        if(Input.GetKey(KeyCode.Space) && _canShoot) Shoot();
     }
 
     private void FixedUpdate()
@@ -47,7 +65,6 @@ public class Player : MonoBehaviour
         {
             var bullet = Instantiate(_bulletPrefab);
             bullet.transform.position = firingPoint.position;
-            bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 25f);
         }
     }
 }
